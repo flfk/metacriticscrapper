@@ -19,12 +19,12 @@ userscores=[]
 releasedates=[]
 
 # #scrape the critic scores
-# for x in soup.find_all("div", attrs={"class": "metascore_w small release positive"}):
-# 	criticscores.append(x.text)
+for x in soup.find_all("div", attrs={"class": "metascore_w small release positive"}):
+	criticscores.append(x.text)
 
 #Scrape the album names. Note that the way the data exists in the HTML is with long spaces, so need to strip data
-# for x in soup.find_all("div", attrs={"class": "basic_stat product_title"}):
-# 	albumnames.append((x.text).strip())
+for x in soup.find_all("div", attrs={"class": "basic_stat product_title"}):
+	albumnames.append((x.text).strip())
 
 # for the band names, user scores and release dates they are all included in a list so need to find "data" span which is second list item
 
@@ -43,24 +43,36 @@ for x in soup.find_all("li", attrs={"class": "stat release_date"}):
 	y = x.find("span", attrs={"class": "data"}).text
 	releasedates.append(y)
 
+#find the elements that are interesting - if the user score is 7.8 or higher
 
+#given a lot of scores are "tbd" need to test
+def is_number(x):
+    try:
+        float(x)
+        return True
+    except ValueError:
+        return False
 
-# 	for y in x.find_all("span", attrs={"class": "data"}):
-# 		albumnames.append(y)
+#use a counter to track which element in the list it is - note start at -1 since we want the first count to start at 0
+counter = -1
+#create a list in which to output the indeces of list elements that are selected
+topelementindeces = []
 
-# print bandnames
+#loop through user scores and select relevant elements
+for x in userscores:
+	#add to counter
+	counter = counter + 1
+	#use defined function to test if it is a number first
+	if is_number(x) == True:
+		if float(x) > 7.8:
+			topelementindeces.append(counter)
 
-# <li class="stat product_artist">
-#                     <span class="label">Artist:</span>
-#                     <span class="data">King Gizzard &amp; the Lizard Wizard</span>
-#                 </li>
+#create a list which outputs all the information for relevant aalbums
+bestalbums = []
 
-# <span class="data textscore textscore_favorable">7.6</span>
+for i in topelementindeces:
+	bestalbums.append([userscores[i],bandnames[i],albumnames[i],releasedates[i]])
 
-#scrape the band names
-
-#scrape the user scores
-
-#scrape the release dates
-
-
+#print output
+for album in bestalbums:
+	print album
