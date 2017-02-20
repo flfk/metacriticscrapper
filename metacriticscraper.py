@@ -18,44 +18,49 @@ bandnames=[]
 userscores=[]
 releasedates=[]
 
-links=[]
+# #scrape the critic scores
+# for x in soup.find_all("div", attrs={"class": "metascore_w small release positive"}):
+# 	criticscores.append(x.text)
 
-for link in soup.find_all("div", attrs={"class": "metascore_w small release positive"}):
-	links.append(link.text)
+#Scrape the album names. Note that the way the data exists in the HTML is with long spaces, so need to strip data
+# for x in soup.find_all("div", attrs={"class": "basic_stat product_title"}):
+# 	albumnames.append((x.text).strip())
 
-print links
+# for the band names, user scores and release dates they are all included in a list so need to find "data" span which is second list item
+
+# scrape the band names
+for x in soup.find_all("li", attrs={"class": "stat product_artist"}):
+	y = x.find("span", attrs={"class": "data"}).text
+	bandnames.append(y)
+
+# scrape the user scores
+for x in soup.find_all("li", attrs={"class": "stat product_avguserscore"}):
+	y = x.find("span", attrs={"class": "data"}).text
+	userscores.append(y)
+
+# scrape the release dates
+for x in soup.find_all("li", attrs={"class": "stat release_date"}):
+	y = x.find("span", attrs={"class": "data"}).text
+	releasedates.append(y)
 
 
-#find all the information and populate the lists
 
-# for criticscore in soup.find_all('div', attrs={"class":"metascore_w small release positive"}):
-# 	criticscores.append(criticscore)
-# for criticscore in soup.find_all('a'):
-# 	print criticscore
+# 	for y in x.find_all("span", attrs={"class": "data"}):
+# 		albumnames.append(y)
 
-# print criticscores
+# print bandnames
 
-#create a list with all the band names
+# <li class="stat product_artist">
+#                     <span class="label">Artist:</span>
+#                     <span class="data">King Gizzard &amp; the Lizard Wizard</span>
+#                 </li>
+
+# <span class="data textscore textscore_favorable">7.6</span>
+
+#scrape the band names
+
+#scrape the user scores
+
+#scrape the release dates
 
 
-
-
-# #selenium required to scrape given that there is javascript that isn't included in the source code
-# from selenium import webdriver
-# from bs4 import BeautifulSoup
-
-# #set the path to the raw path of the driver to be used
-# chrome_path = r'/Users/FelixKramer/Desktop/Coding/Chromedriver/chromedriver'
-# driver = webdriver.Chrome(chrome_path)
-
-# #set the url and run selenium get function
-# url = "http://www.metacritic.com/browse/albums/release-date/new-releases/date"
-# driver.get(url)
-
-# #get the html code for the page that was opened using selenium
-# html = driver.page_source
-
-# #run the html collected from selenium through BeautifulSoup
-# soup = BeautifulSoup(html, 'lxml')
-
-# print soup
