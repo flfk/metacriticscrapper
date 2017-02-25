@@ -73,25 +73,17 @@ bestalbums = []
 for i in topelementindeces:
 	bestalbums.append([userscores[i],bandnames[i],albumnames[i],releasedates[i]])
 
-#create a list which has the youtube links to follow to easily sample tracks
-links = []
+#create a list which has the youtube links in html format to follow to easily sample tracks
 
+links = []
 #the standard youtube search url as a base
 baseurl = "https://www.youtube.com/results?search_query="
-
 #search the artist name and album name, noting that in youtube conventions, spaces are replaced with a "+"
 for i in bestalbums:
 	link = baseurl + (i[1]+"+"+i[2]).replace(" ","+")
-	links.append(link)
+	links.append('<a href="'+link +'">'+", ".join(i)+"</a>")
 
-#save all the information in a text file to make it easier to read
-
-with open ("hitlist.txt", "w") as fo:
-	for albuminfo,link in zip(bestalbums,links):
-		#given that the album info is in a list need to loop through it seperately
-		for x in albuminfo:
-			fo.write(x.encode('utf-8')+" ")
-		#add the link in also
-		fo.write(link.encode('utf-8'))
-		#add a blank line to make it easier to read
-		fo.write('\n'+'\n')
+#save all the information in an html file to open in chrome and follow links
+with open ("hitlist.html", "w") as fo:
+	for link in links:
+		fo.write(link.encode('utf-8')+'</br>'+'</br>')
